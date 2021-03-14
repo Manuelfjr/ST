@@ -1,3 +1,4 @@
 # Repositorio destinado a disciplina de Series Temporais
 
-**- ![Deflação](/home/manuel/Área de trabalho/UFPB/ST/R/.img/icms_stl.png)**
+**- Deflação**
+![Deflação](https://raw.githubusercontent.com/Manuelfjr/ST/main/R/.img/icms_stl.png)
