@@ -1,4 +1,7 @@
 # Instalando pacotes
+setwd('R/')
+getwd()
+
 rm(list=ls())
 install.packages("expsmooth")
 #install.packages("fastR")
@@ -15,7 +18,7 @@ names = c('data_icms_igpdi.csv','ipeadata_icms.csv', 'ipeadata_igpdi.csv')
 
 # Importando dados
 data = read.csv(paste(url, names[1], sep = '/'), sep = ',')
-data = data[seq(13, dim(data)[1]),]
+data = data[seq(25, dim(data)[1]),]
 View(data)
 # Processando 
 igpdi = data[,2]
@@ -47,25 +50,10 @@ pacf(icms_d.ts)
 
 ## Decomposicao da serie temporal
 icms.stl = decompose( icms_d.ts )
+
+png(".img")
 plot(icms.stl)
+dev.off()
+
 icms.stl$trend
 
-
-# test --------------------------------------------------------------------
-
-
-months = c('01','02','03','04','05','06','07','08','09','10','11','12')
-values = numeric(0)
-k = 1
-m = 1
-for (i in 1995:2020){
-  for (j in 1:12){
-    values[k] = paste(i, months[m], sep = '.')
-    m = m + 1
-    k = k + 1
-  }
-  m = 1
-}
-length(values)
-dim(data)
-data[seq(25,(dim(data)[1]) - 6),]
