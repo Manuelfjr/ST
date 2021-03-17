@@ -124,7 +124,7 @@ y.s.d.ts = ts(y.s.d, start=c(2020,3), frequency = 367)
 y.se.d.ts = ts(y.se.d, start=c(2020,3), frequency = 367)
 y.co.d.ts = ts(y.co.d, start=c(2020,3), frequency = 367)
 
-png(".img/data_region_new_deaths.png", width=480, height = 270)
+png(".img/data_country_new_deaths.png", width=480, height = 270)
 par(mfrow=c(2,3))
 plot(y.ne.d.ts, xlab = 'tempo', ylab = 'casos')
 title('Nordeste (NE)')
@@ -145,3 +145,4 @@ dev.off()
 
 acf(y.d.ts)
 pacf(y.d.ts)
+
