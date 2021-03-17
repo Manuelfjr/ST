@@ -24,3 +24,11 @@
 
 * **Novas mortes confirmadas:** Serie temporal das novas mortes confirmados desde _01/03/2020_ até _16/03/2021_.
 ![new_deaths_country](https://raw.githubusercontent.com/Manuelfjr/ST/main/R/project/R/.img/data_country_new_deaths.png)
+
+### Paraíba
+* **Novos casos confirmados:** Serie temporal dos novos casos confirmados desde _01/03/2020_ até _16/03/2021_.
+![new_confirmed_paraiba](https://raw.githubusercontent.com/Manuelfjr/ST/main/R/project/R/.img/data_paraiba_new_confirmed.png)
+
+
+* **Novas mortes confirmadas:** Serie temporal das novas mortes confirmados desde _01/03/2020_ até _16/03/2021_.
+![new_deaths_paraib](https://raw.githubusercontent.com/Manuelfjr/ST/main/R/project/R/.img/data_paraiba_new_deaths.png)

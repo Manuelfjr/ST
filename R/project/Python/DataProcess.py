@@ -10,7 +10,8 @@ for tp in ['confirmed', 'deaths']:
 
     # Treatment
     regions = ['Brasil','Norte', 'Nordeste', 'Sudeste', 'Sul', 'Centro-Oeste']
-    df_states = data.drop(regions)
+    df_states = data.drop(regions).T
+
     df_regions = data.T[regions[1:]]
     df_brasil = data.T[regions[0]].T
 
