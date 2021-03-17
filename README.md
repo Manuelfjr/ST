@@ -16,3 +16,11 @@
 
 * **Novas mortes confirmadas:** Serie temporal das novas mortes confirmados desde _01/03/2020_ até _16/03/2021_.
 ![new_deaths_brasil](https://raw.githubusercontent.com/Manuelfjr/ST/main/R/project/R/.img/data_brasil_new_deaths.png)
+
+### Regiões do Brasil
+* **Novos casos confirmados:** Serie temporal dos novos casos confirmados desde _01/03/2020_ até _16/03/2021_.
+![new_confirmed_brasil](https://raw.githubusercontent.com/Manuelfjr/ST/main/R/project/R/.img/data_regions_new_confirmed.png)
+
+
+* **Novas mortes confirmadas:** Serie temporal das novas mortes confirmados desde _01/03/2020_ até _16/03/2021_.
+![new_deaths_brasil](https://raw.githubusercontent.com/Manuelfjr/ST/main/R/project/R/.img/data_regions_new_deaths.png)
