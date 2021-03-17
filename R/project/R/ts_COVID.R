@@ -89,7 +89,7 @@ y.s.c.ts = ts(y.s.c, start=c(2020,3), frequency = 367)
 y.se.c.ts = ts(y.se.c, start=c(2020,3), frequency = 367)
 y.co.c.ts = ts(y.co.c, start=c(2020,3), frequency = 367)
 
-png(".img/data_region_new_confirmed.png", width=480, height = 270)
+png(".img/data_country_new_confirmed.png", width=480, height = 270)
 par(mfrow=c(2,3))
 plot(y.ne.c.ts, xlab = 'tempo', ylab = 'casos')
 title('Nordeste (NE)')
