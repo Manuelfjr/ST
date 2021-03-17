@@ -1,12 +1,13 @@
 # Repositorio destinado a disciplina de Series Temporais
 
-## Aula 04: Deflação
+## Aula 04: Deflação (Rio Grande do Norte - RN)
+
+* [Link](https://github.com/Manuelfjr/ST/blob/main/R/MyFINTS/deffla.R) para o  script
 
 ![Deflação](https://raw.githubusercontent.com/Manuelfjr/ST/main/R/.img/icms_stl.png)
 
-
 ## Projeto - COVID 19
-* [Link para o script](https://github.com/Manuelfjr/ST/blob/main/R/project/R/ts_COVID.R)
+* [Link](https://github.com/Manuelfjr/ST/blob/main/R/project/R/ts_COVID.R) para o script
 
 ### Brasil
 * **Novos casos confirmados:** Serie temporal dos novos casos confirmados desde _01/03/2020_ até _16/03/2021_.
