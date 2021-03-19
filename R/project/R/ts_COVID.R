@@ -30,7 +30,7 @@ y.c.ts = ts(y.c, start=c(2020,3), frequency = 367)
 
 png(".img/data_brasil_new_confirmed.png", width=480, height = 270)
 plot(y.c.ts, xlab = 'tempo', ylab = 'casos')
-title('Novos casos confirmados no Brasil (01/03/2020 á 16/03/2021)')
+title('Novos casos confirmados no Brasil (01/03/2020 á 18/03/2021)')
 grid()
 dev.off()
 
@@ -43,7 +43,7 @@ y.d.ts = ts(y.d, start=c(2020,3), frequency = 367)
 
 png(".img/data_brasil_new_deaths.png", width=480, height = 270)
 plot(y.d.ts, xlab = 'tempo', ylab = 'mortes')
-title('Novas mortes confirmados no Brasil (01/03/2020 á 16/03/2021)')
+title('Novas mortes confirmados no Brasil (01/03/2020 á 18/03/2021)')
 grid()
 dev.off()
 
@@ -174,7 +174,7 @@ y.c.ts = ts(y.c, start=c(2020,3), frequency = 367)
 
 png(".img/data_paraiba_new_confirmed.png", width=480, height = 270)
 plot(y.c.ts, xlab = 'tempo', ylab = 'casos')
-title('Novos casos confirmados na Paraíba (01/03/2020 á 16/03/2021)')
+title('Novos casos confirmados na Paraíba (01/03/2020 á 18/03/2021)')
 grid()
 dev.off()
 
@@ -187,7 +187,7 @@ y.d.ts = ts(y.d, start=c(2020,3), frequency = 367)
 
 png(".img/data_paraiba_new_deaths.png", width=480, height = 270)
 plot(y.d.ts, xlab = 'tempo', ylab = 'mortes')
-title('Novas mortes confirmados na Paraíba (01/03/2020 á 16/03/2021)')
+title('Novas mortes confirmados na Paraíba (01/03/2020 á 18/03/2021)')
 grid()
 dev.off()
 
