@@ -1,51 +1,76 @@
 ### Projeto 01 #################################################################
 # Aluno: Manuel Ferreira Junior
 # Disciplina: Series Temporais
-#setwd("/home/manuel/Área de trabalho/UFPB/ST/R/project/R")
+setwd("R")
 getwd()
+#ficheiro = file.choose()
+#bd = read.table(file = ficheiro, header=TRUE, dec=".")
+#head(bd)
+#y = ts(bd$casos[seq(85)], start=c(2020.3,27), frequency = 365)
+#bd[bd$casos == max(bd$casos),]
+#plot(y, xlab = 'tempo', ylab = 'casos')
+#plot(tail(y.c.ts, 24), type='l')
+#title('Novos casos confirmados no Brasil (01/03/2020 á 24/04/2021)')
+#grid()
 
 # BRASIL (BR) -------------------------------------------------------------
 # Importando os dados
-url.c = 'data/confirmed/data_brasil_new_confirmed.csv'
-url.d = 'data/deaths/data_brasil_new_deaths.csv'
+url.c = '/home/manuel/Área de Trabalho/git/UFPB/ST/R/project/R/data/confirmed/data_brasil_new_confirmed.csv'
+url.d = '/home/manuel/Área de Trabalho/git/UFPB/ST/R/project/R/data/deaths/data_brasil_new_deaths.csv'
 
 # Processando
 
 ## Novos casos
 data.c = read.csv(url.c, header = TRUE)[-1,]
-View(data.c)
 
+rownames(data.c) = seq(dim(data.c)[1])
 colnames(data.c) = c('Data', 'BR')
-data.c = data.c[-c(1,2,3,4),]
+#data.c = data.c[-c(1,2,3,4),]
 
 ## Novas mortes
 data.d = read.csv(url.d, header = TRUE)[-1,]
+
+rownames(data.d) = seq(dim(data.d)[1])
 colnames(data.d) = c('Data', 'BR')
-data.d = data.d[-c(1,2,3,4),]
+#data.d = data.d[-c(1,2,3,4),]
 
 ## Serie temporal 
 ### Novos casos confirmados
 y.c = as.integer(data.c$BR)
-y.c.ts = ts(y.c, start=c(2020,3), frequency = 367)
+y.c.ts = ts(y.c, start=c(2020.3,1), frequency = 365)
 
-png(".img/data_brasil_new_confirmed.png", width=480, height = 270)
+png("/home/manuel/Área de Trabalho/git/UFPB/ST/R/project/R/.img/data_brasil_new_confirmed.png", width=480, height = 270)
+#par(mfrow=c(2,1))
 plot(y.c.ts, xlab = 'tempo', ylab = 'casos')
-title('Novos casos confirmados no Brasil (01/03/2020 á 18/03/2021)')
+#plot(tail(y.c.ts, 24), type='l')
+title('Novos casos confirmados no Brasil (01/03/2020 á 24/04/2021)')
 grid()
-dev.off()
 
+#Teste
+a = data.c[seq(370,401),]
+y = ts(as.integer(a$BR), start=c(2021.3,1),frequency = 365)
+plot(y)
+data.c[max(y.c) == y.c,]
+
+dev.off()
+graphics.off()
 acf(y.c.ts)
 pacf(y.c.ts)
 
 ### Novas mortes confirmados
 y.d = as.integer(data.d$BR)
-y.d.ts = ts(y.d, start=c(2020,3), frequency = 367)
+y.d.ts = ts(y.d, start=c(2020.3,1), frequency = 365)
 
-png(".img/data_brasil_new_deaths.png", width=480, height = 270)
+png("'/home/manuel/Área de Trabalho/git/UFPB/ST/R/project/R/.img/data_brasil_new_deaths.png", width=480, height = 270)
 plot(y.d.ts, xlab = 'tempo', ylab = 'mortes')
-title('Novas mortes confirmados no Brasil (01/03/2020 á 18/03/2021)')
+title('Novas mortes confirmados no Brasil (01/03/2020 á 24/04/2021)')
 grid()
-dev.off()
+
+# Teste
+a = tail(data.d,24)
+y = ts(as.integer(a$BR), start=c(2021.3,1),frequency = 365)
+plot(y)
+data.d[max(y.d) == y.d,]
 
 acf(y.d.ts)
 pacf(y.d.ts)
