@@ -1,0 +1,90 @@
+---
+title: "Um breve estudo utilizando série temporal, sobre os casos confirmados de COVID-19 no Brasil"
+author: "Manuel Ferreira Junior, Universidade Federal da Paraíba"
+date: "`r format(Sys.time(), '%B %d, %Y')`"
+abstract: "O banco utilizado foi retirado de um repositorio localizado no github, sendo mantido por uma iniciativa do dono do repositorio. Os dados estão localizados de forma simples e prática, coletados manualmente do Ministério da Saúde. O conjunto de dados é continuamente atualizado, sendo atualizado sempre proximo a meia noite."
+output:
+  pdf_document: default
+  word_document: default
+lang: "pt-BR"
+geometry: margin=1in
+fontsize: 10pt
+keywords: 
+- R
+- série temporal
+- COVID-19, analise descritiva
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+- Fonte: Casos confirmados (<https://github.com/elhenrico/covid19-Brazil-timeseries/blob/master/confirmed-new.csv>)
+| Casos confirmados, filtrando apenas o Brasil (<https://github.com/Manuelfjr/ST/blob/main/R/project/R/data/confirmed/data_brasil_new_confirmed.csv>)
+
+# Análise Descritiva
+## Tratando o banco
+```{r}
+library(urca)
+url.c = '/home/manuel/Área de Trabalho/git/UFPB/ST/R/project/R/data/confirmed/data_brasil_new_confirmed.csv'
+data.c = read.csv(url.c, header = TRUE)[-1,]
+rownames(data.c) = seq(dim(data.c)[1])
+colnames(data.c) = c('Data', 'BR')
+data.c['BR'] = as.integer(data.c$BR)
+```
+
+## Descrição:
+```{r}
+summary(data.c)
+```
+
+```{r}
+str(data.c)
+```
+
+\qquad O banco utilizado foi retirado de um repositorio localizado no github, sendo mantido por uma iniciativa do dono do repositorio. Os dados estão localizados de forma simples e prática, coletados manualmente do Ministério da Saúde. O conjunto de dados é continuamente atualizado, sendo atualizado sempre proximo a meia noite.   
+
+\qquad Para o seguinte estudo, iremos considerar os casos diários de COVID-19 para o Brasil como um todo, realizando os técnicas estudadas durante o decorrer da disciplina de Séries Temporais. Além disso, o banco de dados foi filtrado para obtermos apenas os resultados referente ao número de casos diários confirmados no BRASIL, segue o link referente em anexo.    
+
+\qquad Com relação aos valores da série, ela não apresenta valores negativos e não foi preciso retirar nenhuma observação do conjunto de dados, ou seja, possuimos os valores observados dos casos confirmados de COVID-19 no Brasil desde o dia 26 de fevereiro de 2020.
+
+# Série temporal
+```{r}
+y.c = as.integer(data.c$BR)
+d <- seq(as.Date("2020-02-26"), as.Date("2021-04-24"), "day")
+months <- seq(min(d), max(d), "month")
+plot(y.c~ d, type = 'l',xaxt = "n", xlab = 'tempo', ylab = 'casos',lwd = 0.5)
+title('Novos casos confirmados no Brasil (26/02/2020 á 24/04/2021)')
+axis(1, months, format(months, "\n%Y\n%b"))
+grid()
+```
+
+\qquad A série utilizada contempla o périodo de 26 de fevereiro até o último dia atualizado sobre o conjunto de dados, sendo atualizado diariamente Iremos contemplar dos dia 26 de fevereiro de 2020 até 24 de abril de 2021. Ao analisarmos a série, podemos observar uma queda no número de confirmados entre os periodos de agosto a outubro de 2020, evidenciado pelo possivel resultado da criação da lei Nº 14.046, de 24 de agosto de 2020, onde fica explicito o adiamento e cancelamento de serviços, de reservas e de eventos dos setores de turismo e de cultura, em função do estado de calamidade publica, reconhecida pelo Decreto Legislativo nº 6, de 20 de março de 2020, e da emergência de saúde pública de importância internacional decorrente da pandemia da Covid-19.   
+
+\qquad Após a diminuição das medidas de afastamento, como lockdown e quarentena, em algumas regiões do país, mantendo apenas medidas de afastamentos previstas pela lei da quarentena, alguns estados começaram a “relaxar”, e houve outro aumento no número de contaminados entr os meses de novembro e dezembro, tendo uma diminuição no aumento de contaminados no final de dezembro. Contudo, é possivel notar que para o ano de 2021, ja para o mês de fevereiro, podemos encontrar altos números de contaminados, dado pelo relaxamento das medidas de enfrentamento ao covid, por parte de alguns estados, sendo evidenciado uma  possivel terceira onda de ataque do virus.   
+
+\qquad Por fim, podemos notar que até então, o Brasil econtra-se na sua terceira onda, a primeira sendo a mais duradoura, dando inicio seus altos números por volta do final de abril, e tendo uma queda no mês de agosto; A segunda onde é possivel notar em um intervalo menor sendo entre o final de outubro e, mantendo uma constância no final de dezembro; E, atualmente, encontramos em uma terceira onda, vinda do inicio do ano de 2021.   
+
+\qquad Além disso, ao analisarmos a série temporal como um todo, podemos notar um comportamento estácionario, onde a série apaerenta oscilar para baixo e para cima em torno de um valor esperado, ao desconsiderarmos o inicio dos registros de casos, por apresentar grande número de zeros inicialmente; Ademais, também é possivel notar uma variância constance sobre as mesmas circustancias citadas anteriormente.  
+
+# Teste de estacionariedade
+```{r}
+summary(ur.df(y.c, type='none', lags=0))
+```
+
+```{r}
+PP.test(y.c)
+```
+
+\qquad Ao considerarmos tanto o teste de de Phillips Perron quando o de Dickey Fuller, tomando um nível de significância de 5%, temos que para ambos é possivel notar um p-valormenor que o nivel de significância, ou seja, rejeitamos a hipótese nula de que a série é não estácionaria, ou seja, há evidência suficientes parar afirmar que a série temporal do número de casos de COVID-19 confirmados diariamente é estácionaria.
+
+# Função de autocorrelação e função de autocorrelação parcial
+```{r}
+par(mfrow=c(1,2))
+acf(y.c, main='Função de auto correlação',
+    xlab="defasagem",ylab="autocorrelacoes")
+pacf(y.c, main='Função de auto correlação parcial',
+     xlab="defasagem",ylab="autocorrelacoes")
+```
+
+\qquad Considerando o gráfico de autocorrelação, podemos notar um decaimento das autocorrelações ao longo das defasagens lento, ou seja, uma diminuição de uma autocorrelação entre os valores osbervados ao longo dos periodos, decaindo de forma lenta. Da mesma forma, podemos notar que a função de autocorrelação parcial encontra-se em torno de 0, apresentando apenas algumas defasagens superior ao intervalo calculado para as suas autocorrelações, porém algumas das suas autocorrelações são superiores a 0.4.

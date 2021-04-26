@@ -3,16 +3,7 @@
 # Disciplina: Series Temporais
 setwd("R")
 getwd()
-#ficheiro = file.choose()
-#bd = read.table(file = ficheiro, header=TRUE, dec=".")
-#head(bd)
-#y = ts(bd$casos[seq(85)], start=c(2020.3,27), frequency = 365)
-#bd[bd$casos == max(bd$casos),]
-#plot(y, xlab = 'tempo', ylab = 'casos')
-#plot(tail(y.c.ts, 24), type='l')
-#title('Novos casos confirmados no Brasil (01/03/2020 á 24/04/2021)')
-#grid()
-
+library(urca)
 # BRASIL (BR) -------------------------------------------------------------
 # Importando os dados
 url.c = '/home/manuel/Área de Trabalho/git/UFPB/ST/R/project/R/data/confirmed/data_brasil_new_confirmed.csv'
@@ -25,38 +16,42 @@ data.c = read.csv(url.c, header = TRUE)[-1,]
 
 rownames(data.c) = seq(dim(data.c)[1])
 colnames(data.c) = c('Data', 'BR')
+data.c['BR'] = as.integer(data.c$BR)
 #data.c = data.c[-c(1,2,3,4),]
-
+summary(data.c)
 ## Novas mortes
 data.d = read.csv(url.d, header = TRUE)[-1,]
 
 rownames(data.d) = seq(dim(data.d)[1])
 colnames(data.d) = c('Data', 'BR')
+data.d['BR'] = as.integer(data.d$BR)
+summary(data.d)
 #data.d = data.d[-c(1,2,3,4),]
 
 ## Serie temporal 
 ### Novos casos confirmados
 y.c = as.integer(data.c$BR)
-y.c.ts = ts(y.c, start=c(2020.3,1), frequency = 365)
+
+d <- seq(as.Date("2020-02-26"), as.Date("2021-04-24"), "day")
+months <- seq(min(d), max(d), "month")
 
 png("/home/manuel/Área de Trabalho/git/UFPB/ST/R/project/R/.img/data_brasil_new_confirmed.png", width=480, height = 270)
-#par(mfrow=c(2,1))
-plot(y.c.ts, xlab = 'tempo', ylab = 'casos')
-#plot(tail(y.c.ts, 24), type='l')
-title('Novos casos confirmados no Brasil (01/03/2020 á 24/04/2021)')
+plot(y.c~ d, type = 'l',xaxt = "n", xlab = 'tempo', ylab = 'casos')
+
+title('Novos casos confirmados no Brasil (26/02/2020 á 24/04/2021)')
+# draw X axis
+axis(1, months, format(months, "\n%Y\n%b"))
 grid()
-
-#Teste
-a = data.c[seq(370,401),]
-y = ts(as.integer(a$BR), start=c(2021.3,1),frequency = 365)
-plot(y)
-data.c[max(y.c) == y.c,]
-
 dev.off()
 graphics.off()
-acf(y.c.ts)
-pacf(y.c.ts)
 
+par(mfrow=c(1,2))
+acf(y.c, main='Função de auto correlação',
+    xlab="defasagem",ylab="autocorrelacoes")
+pacf(y.c, main='Função de auto correlação parcial',
+     xlab="defasagem",ylab="autocorrelacoes")
+
+PP.test(y.c)
 ### Novas mortes confirmados
 y.d = as.integer(data.d$BR)
 y.d.ts = ts(y.d, start=c(2020.3,1), frequency = 365)
