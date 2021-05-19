@@ -9,6 +9,30 @@ library(urca)
 url.c = '/home/manuel/Área de Trabalho/git/UFPB/ST/R/project/R/data/confirmed/data_brasil_new_confirmed.csv'
 url.d = '/home/manuel/Área de Trabalho/git/UFPB/ST/R/project/R/data/deaths/data_brasil_new_deaths.csv'
 
+y =arima.sim(list(order = c(1,0,0), ar = 0.7), n = 100)
+
+y
+y[1:10]
+#defasagem igual a 1, ou seja, y_{t-1}
+y.1 = lag(y,-1)
+y.1[1:10]
+#defasagem igual a 2, ou seja, y_{t-2}
+y.2 = lag(y,-2)
+y.2[1:10]
+#defasagem igual a 3, ou seja, y_{t-3}
+y.3 = lag(y,-3)
+y.3[1:10]
+
+# concatenando a serie temporal e
+# as defasagens
+cbind(y, y.1, y.2, y.3)
+
+cor(y[1:99], y.1[2:100])
+cor(y[1:98], y.2[3:100])
+cor(y[1:97], y.2[4:100])
+cor(y[1:96], y.2[5:100])
+cor(y[1:95], y.2[6:100])
+
 # Processando
 
 ## Novos casos
@@ -38,7 +62,9 @@ months <- seq(min(d), max(d), "month")
 png("/home/manuel/Área de Trabalho/git/UFPB/ST/R/project/R/.img/data_brasil_new_confirmed.png", width=480, height = 270)
 plot(y.c~ d, type = 'l',xaxt = "n", xlab = 'tempo', ylab = 'casos')
 
-title('Novos casos confirmados no Brasil (26/02/2020 á 24/04/2021)')
+title(
+  paste('Novos casos confirmados no Brasil (',data.d$Data[1], ' á ',data.d$Data[length(data.d)], ')',sep=' ')
+  )
 # draw X axis
 axis(1, months, format(months, "\n%Y\n%b"))
 grid()

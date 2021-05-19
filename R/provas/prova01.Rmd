@@ -1,0 +1,155 @@
+---
+title: "Avaliação I"
+author: "Manuel Ferreira Junior, 20180008601"
+date: "`r format(Sys.time(), '%B %d, %Y - %X')`"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Questão 01
+```{r}
+set.seed(2)
+n = 50
+yt = arima.sim(n=n, list(ar=0.6))
+yt
+```
+```{r}
+plot(yt)
+```
+
+## A)
+  \qquad  Vamos obter $y_{t-1}$ utilizando a função lag(), que simplesmente calcula a dafasagem da série, sendo a defasagem para $y_{t-1}$ igual a 1. De forma reduzida, $y_{t-1}$ pega todas as observações sobre a nossa série, exceto uma.
+```{r}
+yt.1 = lag(yt,-1)
+yt.1
+```
+
+## B)
+```{r}
+yt.1 = lag(yt,-1)
+yt.2 = lag(yt,-2)
+```
+  - $y_{t}$ e $y_{t-1}$
+```{r}
+plot(yt[1:49], yt.1[2:50], 
+     xlab=expression(y[t-1]),
+     ylab=expression(y[t]))
+```
+  
+```{r}
+cor(yt[1:49], yt.1[2:50])
+```
+  \qquad  Podemos notar uma correlação de 0.5096839 entre $y_{t-1}$ e $y_{t}$, uma não tão alta. Ao analisarmos um plot de $y_{t-1}$ por $y_{t}$ podemos ver uma dependência não tão forte, evidenciado pela correlação entre elas, evidenciando um comportamento de uma série estacionaria.
+
+
+  - $y_{t}$ e $y_{t-2}$
+```{r}
+plot(yt[1:48], yt.2[3:50], 
+     xlab=expression(y[t-2]),
+     ylab=expression(y[t]))
+```
+
+```{r}
+cor(yt[1:48], yt.2[3:50])
+```
+  
+  \qquad  Ao aumentarmos em uma defasagem, agora temos $y_{t-2}$, apresentando uma baixa correlação com $y_{t}$, podemos ver isso também pelo gráfico $y_{t-2}$ vs $y_{t}$, onde os gráficos aparentam estar dispersos sem uma relação entre os valores.
+  
+## C)
+```{r}
+diff(yt)
+```
+
+  \qquad  Para realizarmos a primeira defasagem, fazemos o seguinte calculo: Consideramos $y_{t}$ e $y_{t-1}$, tal que possamos fazer a diferença entre os dois, ou seja, $\Delta^1 y_{t} = y_{t} - y_{t - 1}$. Ao realizarmos essa diferença, perdemos uma observação do nosso conjunto. Essa diferença é utilizada com o intuito de tornar a série estacionaria, porém nossa série já é estacionaria, pois $\phi = 0.6 < 1$, logo não seria necessário realizar essa diferença.
+
+## D)  
+  \qquad A diferença entre $y_{t-1}$ e $\Delta y_{t}$ é que $y_{t-1}$ é o valor observado no momento $t-1$ da série, ou seja, retiramos o ultimo valor da série para podermos analisar quem são os valores de $y_{t-1}$; Quanto para $\Delta y_{t}$, essa é a primeira diferença entre da série, ou seja,$\Delta y_{t} = y_{t} - y_{t - 1}$, sendo a diferença da série considerando os momentos da série em $t$ menos os momentos $t-1$, apos realizarmos esse calculo, perdemos uma observação do conjunto de dados da série, tendo como intuito tornar a série estacionaria.
+  
+# Questão 02
+
+  \qquad  Como $y_{t}$ assume zero até o tempo 6 da série, e houve um choque positivo no tempo 7, ou seja, haverá um salto grande da série, assumindo 10 nesse momento, e haverá um decaimento nos tempos 8 a 25, por conta do valor de $\phi = 0.4$, de inicio sendo uma queda rapida, porém a cada aumento de tempo, a séria decai mais lentamente para 0.
+  
+```{r}
+n = 25
+yt = numeric(n)
+et = rnorm(n)
+et[7] = 10
+et[8:n] = 0
+for (i in 7:n){
+  yt[i] = 0.4*yt[i-1] + et[i]
+}
+yt
+```
+
+```{r}
+plot.ts(yt)
+```
+
+# Questão 03
+```{r}
+set.seed(2)
+n = 25
+yt = numeric(n)
+et = rnorm(n)
+yt[1] = et[1]
+for (i in 2:n){
+  yt[i] = yt[i-1] + et[i] 
+}
+```
+
+```{r}
+plot.ts(yt)
+```
+
+## B)
+```{r}
+data.frame(yt[1:10], et[1:10])
+```
+  \qquad Essa série não aparenta ter um comportamento estacionario, uma vez que temos $\phi = 1$, e ao analisarmos seus valores e o seu gráfico, temos que a série não esta centrada em torno de um valor esperado e nem apresenta uma variância constante, evidenciando a violação de um comportamento estacionario; Por fim, analisando somente esses 10 primeiros valores, podemos evidenciar esse crescimento direto a cada tempo $t$.
+  
+# Questão 04   
+
+\qquad Podemos dizer que a diferença entre o autoregressivo e o de médias moveis é que, para o autoregressivo, os $y_{t}$ são dependentes do seus valores anteriores, ou seja, dependente direto das suas defasagens, e também ponderado de um parâmetro $\phi$ (explicitamos isso melhor na **Questão 03, letra A**); Já para o modelo de médias moveis, é possivel afirmar que cada $y_{t}$ é dependente de um erro de sua regressão, assumindo alguma distribuição, feito como combinação linear de um conjunto de parâmetros $\theta_{k}$, onde k é número de parâmetros do modelo.   
+
+\qquad Com relação a segunda parte da questão, temos que existe sim uma relação entre um $AR(1)$ e um $MA(q)$, podendo escrever esse autoregressivo de ordem 1, como um modelo de médias moveis com q parâmetros, da seguinte forma:
+
+- **Considerando um $MA(q)$, temos:**
+$$
+y_{t} = \mu + e_{t} + \theta_{1} \cdot e_{t-1} + \theta_{2} \cdot e_{t-2} + \dots + \theta_{q} \cdot e_{t - q} = \mu + e_{t} + \sum_{k = 1}^{q} \theta_{k}\cdot e_{t - k}
+$$
+  
+\qquad Por fim, temos:
+$$
+y_{t} = \mu + e_{t} + \sum_{k = 1}^{q} \theta_{k}\cdot e_{t - k}
+$$
+
+- **Considerando um AR(1), temos:**
+
+$$
+y_{t} = \phi \cdot y_{t - 1} + e_{t} =
+$$
+$$
+= \phi\cdot ( \phi\cdot y_{t-2} + e_{t - 1}) + e_{t} = 
+$$
+
+$$
+= \phi^{2} \cdot y_{t-2} + \phi \cdot e_{t-1} + e_{t} =
+$$
+
+$$
+= \phi^{2}\cdot (\phi \cdot y_{t-3} + e_{t-2}) + \phi \cdot e_{t-1} + e_{t} =
+$$
+$$
+= \phi^{3} \cdot y_{t-3} + \phi^{2}\cdot e_{t-2}  + \phi \cdot e_{t-1} + e_{t} =
+$$
+
+\qquad Por indução matemática, temos que :
+
+$$
+y_{t} = \phi^{t}\cdot y_{0} + e_{t} + \sum_{k = 1}^{t - 1} \phi^{k} \cdot e_{t - k}
+$$
+
+Por fim, podemos evidenciar a relação entre o $AR(1)$ e o $MA(q)$, basta considerar $\mu = \phi^{t}\cdot y_{0}$, $q = t - 1$ e $\theta_{k} = (\phi)^{k}$, onde $\phi$ é parâmetro fixo do modelo autoregressivo, $q$ é número de parâmetros do modelo de médias moveis e $\theta_{k}$ é o k-ésimo parâmetro do modelo de médias moveis.

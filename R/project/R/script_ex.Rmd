@@ -1,0 +1,14 @@
+---
+title: "Script"
+author: "Manuel Ferreira Junior"
+date: "26/04/2021"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+$$
+y_{t} = \gamma^{t}\cdot y_{0} + \sum_{i = 0}^{t - 1} e_{t - i}\cdot \gamma^{i}
+$$

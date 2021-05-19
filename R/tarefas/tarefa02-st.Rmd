@@ -1,0 +1,123 @@
+---
+title: "Tarefa II"
+author: "Manuel Ferreira Junior, 20180008601"
+date: "`r format(Sys.time(), '%B %d, %Y - %X')`"
+output: pdf_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Exercicio I: 
+
+```{r}
+n = 500;et = rnorm(n); yt = numeric(n)
+yt[1] = (1/3)*(et[1] + et[2]);yt[500] = (1/3)*(et[499] + et[500])
+for (i in 2:499){
+  yt[i] = (1/3)*(et[i-1] + et[i] + et[i + 1])
+}
+```
+
+## A)
+
+```{r}
+plot.ts(yt, ylab=expression(y[t]), xlab='Tempo')
+```  
+   
+## B)    
+**Demonstração no final do pdf, anexado.**   
+
+
+## C)
+```{r}
+obj = acf(yt, main='Função de autocorrelação (acf)',
+    xlab="defasagem",ylab="autocorrelacoes")
+```
+\qquad Apos a demonstração do item **(B)**, temos a seguinte situação:
+$$
+Cov(y_{t}, y_{t - k}) = 
+  \begin{cases}
+      \frac{\sigma^2}{3}, & k = 0 \\
+      \frac{2\cdot\sigma^2}{9}, & | k | = 1 \\
+      \frac{1\cdot\sigma^2}{9}, & | k | = 2 \\
+      0, & | k | > 2
+  \end{cases}
+\text{, tal que } k\in\mathbb{Z}
+$$
+$$
+Corr(y_{t}, y_{t - k}) = 
+  \begin{cases}
+      1, & k = 0 \\
+      \frac{2}{3}, & | k | = 1  \\
+      \frac{1}{3}, & | k | = 2  \\
+      0, & | k | > 2 
+  \end{cases}
+\text{, tal que } k\in\mathbb{Z}
+$$
+\qquad Antes de analisarmos o *ACF* e a demonstração realizada, podemos verificar que a série apresenta um comportamento estácionario, sendo ela centrada em um valor esperado, e apresentando uma variância constante, fato este demonstrado durante o item *(B)* do Exercicio I, sendo a variância constante, então $Var(Y_{t}) = \frac{\sigma^{2}}{3}$ e a esperança centrada em zero, então $E[Y_{t}] = 0$.
+ 
+\qquad Ao comparmos com o gráfico *ACF* obtido, podemos ver o decaimento das autocorrelações ao longo das defasagens; Ao analisarmos a demonstração, é esperado que para uma defasagem estritamente superior a 2, as correlações sejam zero, porém no gráfico conseguimos ver que seu decaimento é rápido para 0 após a segunda defasagem. Além disso, podemos notar que a maior correlação, dado essa equação para $y_t$, é para com a primeira defasagem, sendo aproximadamente 0.66, e para a segunda defasagem temos um valor aproximado de 0.33, logo após isso o decaimento é rápido em direção a zero.   
+
+# Exercicio II:
+
+```{r}
+install.packages("astsa")
+library(astsa)
+```
+
+```{r}
+help(chicken)
+```
+
+```{r}
+data("chicken")
+serie = chicken
+```
+
+```{r}
+model = lm(chicken ~ time(chicken))
+summary(model)
+```
+
+```{r}
+plot.ts(chicken,xlab='Tempo',ylab='Preço do frango',lty=1)
+abline(model,col='red',lty=1)
+grid()
+legend(2002, 115, legend=c("Preço do frango pelo tempo", "Reta ajustada"),
+       col=c("black", "red"), lty=c(1,1), cex=0.8, text.font=4, bg='lightgray')
+title('Gráfico do preço de frango nos Estados Unidos versus o tempo
+      e da reta ajustada')
+```
+
+## A)
+-  **Teste *t* **
+$$
+h_{0}: \beta_i = 0
+$$
+$$
+h_{1}: \beta_i \neq 0
+$$
+
+\qquad Podemos notar que, a um nível de significância de 5%, rejeitamos a hipótese nula considerando o test t para os parâmetros, ou seja, há evidências suficientes para afirmar de que o tempo é um variável estatisticamente significante para poder explicar o preço do frango nos Estados Unidos, existindo uma dependência positiva, evidenciado pelo valor de $\beta > 0$, ou seja, a cada incremento de tempo, temos um aumento estimado do preço de frango nos Estados Unidos de em média $ 3,59. Por fim, por rejeitarmos a hipótese nula para todos os parâmetros do modelo, temos que nosso modelo é estatísticamente significante.   
+
+\qquad Além disso, ao analisarmos o nosso coeficiente de determinação obtido pelo modelo,
+podemos dizer que o mesmo apresenta um alto poder explicativo, ou seja, o modelo consegue explicar bem a variabilidade das observações, conseguindo explicar cerca de 91.73% da variabilidade dos dados.   
+
+\pagebreak   
+
+## B)
+```{r}
+plot.ts(chicken, xlab='Tempo', ylab='Preço do frango')
+title('Série temporal do preço do frango nos Estados Unidos')
+grid()
+```
+
+\pagebreak  
+## C)
+```{r}
+PP.test(chicken)
+```
+\qquad Ao analisarmos todos os itens anteriores, graficamente podemos observar que a série não esta centrada em torno de um valor esperado e nem apresenta uma variância constante ao longo do seu comportamento, evidenciando uma violação de um comportamento estácionario.   
+
+\qquad Ao realizarmos o teste de Phillips-Perron, temos que, a um nível de significância de 5%, não rejeitamos a hipótese nula, ou seja, há evidencias suficientes para afirmar que a série é não estácionaria, sendo essa a hipótese nula do teste realizado, então podemos afirmar que a série não esta centrado em um valor constante, observado pelo seu crescimento ao longo do tempo.
