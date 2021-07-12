@@ -11,3 +11,7 @@
 
 - **Site: Monitoramente do COVID-19.**
     - [Dashboard: COVID-19](https://mfjr.shinyapps.io/timeseries/)
+
+- **Banco:** (No codigo, é realizado um processamento no banco de dados antes)
+    - [Link](https://github.com/Manuelfjr/ST/blob/main/Prova%2002/R/project/R/data/confirmed/data_brasil_new_confirmed.csv)
+    - [Fonte](https://github.com/elhenrico/covid19-Brazil-timeseries/blob/master/confirmed-new.csv)
